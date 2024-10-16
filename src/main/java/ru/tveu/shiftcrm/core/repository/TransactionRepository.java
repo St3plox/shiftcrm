@@ -15,7 +15,8 @@ import java.util.Optional;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
     Page<Transaction> findAllBySeller(Seller seller, Pageable pageable);
-    List<Transaction> findAllBySeller(Seller seller);
+    List<Transaction> findAllBySellerOrderByTransactionDateAsc(Seller seller);
+
 
     @Query("SELECT t.seller FROM Transaction t " +
             "WHERE t.transactionDate >= :startDate AND t.transactionDate <= :endDate " +

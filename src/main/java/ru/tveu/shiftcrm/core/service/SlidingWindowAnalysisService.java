@@ -13,20 +13,17 @@ import ru.tveu.shiftcrm.core.exception.ErrorCode;
 import ru.tveu.shiftcrm.core.exception.ErrorMessage;
 import ru.tveu.shiftcrm.core.exception.ServiceException;
 import ru.tveu.shiftcrm.core.mapper.SellerMapper;
-import ru.tveu.shiftcrm.core.mapper.TransactionMapper;
 import ru.tveu.shiftcrm.core.repository.SellerRepository;
 import ru.tveu.shiftcrm.core.repository.TransactionRepository;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AnalysisServiceImpl implements AnalysisService {
+public class SlidingWindowAnalysisService implements AnalysisService {
 
     private final TransactionRepository transactionRepository;
     private final SellerMapper sellerMapper;
@@ -67,13 +64,41 @@ public class AnalysisServiceImpl implements AnalysisService {
         Seller seller = sellerRepository.findById(sellerId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.OBJECT_NOT_FOUND, ErrorMessage.SELLER_NOT_FOUND));
 
-        //TODO: make in asc
-        List<Transaction> sellerTransactions = transactionRepository.findAllBySeller(seller);
+        List<Transaction> sellerTransactions = transactionRepository.findAllBySellerOrderByTransactionDateAsc(seller);
 
-        //TODO: implement sliding window
+        if (sellerTransactions.isEmpty()) {
+            throw new ServiceException(ErrorCode.OBJECT_NOT_FOUND, "No transactions found for seller with id: " + sellerId);
+        }
 
-        var duration = Duration.of(3, ChronoUnit.DAYS);
+        var duration = Duration.ofDays(durationInDays);
 
-        return null;
+        LocalDateTime bestStart = null;
+        LocalDateTime bestEnd = null;
+        int maxTransactions = 0;
+
+        int start = 0;
+        for (int end = 0; end < sellerTransactions.size(); end++) {
+            Transaction endTransaction = sellerTransactions.get(end);
+            LocalDateTime endTime = endTransaction.getTransactionDate();
+
+
+            while (start < end && Duration.between(sellerTransactions.get(start).getTransactionDate(), endTime).compareTo(duration) > 0) {
+                start++;
+            }
+
+            int currentTransactionCount = end - start + 1;
+
+            if (currentTransactionCount > maxTransactions) {
+                maxTransactions = currentTransactionCount;
+                bestStart = sellerTransactions.get(start).getTransactionDate();
+                bestEnd = endTime;
+            }
+        }
+
+        if (bestStart == null || bestEnd == null)
+            throw new ServiceException(ErrorCode.OBJECT_NOT_FOUND, "There is no such period");
+
+
+        return new PeriodDTO(bestStart.toString(), bestEnd.toString());
     }
 }
