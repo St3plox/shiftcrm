@@ -33,7 +33,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "seller_id", referencedColumnName = "id", nullable = false)
-    private Seller sellerId;
+    private Seller seller;
 
     @Column(nullable = false)
     private double amount;

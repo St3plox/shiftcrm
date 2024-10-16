@@ -1,12 +1,14 @@
 package ru.tveu.shiftcrm.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
 public record SellerUpdateRequest(
 
+        @NotNull(message = "ID must not be null")
         Long id,
 
         @Size(max = 255, message = "Name must be between 2 and 255 characters")
