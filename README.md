@@ -25,8 +25,8 @@ Shift CRM - это система управления отношениями с
 1. **Клонируйте репозиторий**:
 
    ```bash
-   git clone https://github.com/your-repo/shift-crm.git
-   cd shift-crm
+   git clone https://github.com/St3plox/shiftcrm
+   cd shiftcrm
    ```
    
 2. **Создайте файл .env в корне проекта и добавьте следующие переменные,
