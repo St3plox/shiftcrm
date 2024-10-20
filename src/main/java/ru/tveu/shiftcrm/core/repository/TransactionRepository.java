@@ -17,15 +17,16 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Page<Transaction> findAllBySeller(Seller seller, Pageable pageable);
     List<Transaction> findAllBySellerOrderByTransactionDateAsc(Seller seller);
 
-
     @Query("SELECT t.seller FROM Transaction t " +
             "WHERE t.transactionDate >= :startDate AND t.transactionDate <= :endDate " +
             "GROUP BY t.seller " +
-            "ORDER BY SUM(t.amount) DESC")
+            "ORDER BY SUM(t.amount) DESC " +
+            "LIMIT 1")
     Optional<Seller> findMostProductiveSeller(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate
     );
+
 
     @Query("SELECT t.seller FROM Transaction t " +
             "WHERE t.transactionDate >= :startDate AND t.transactionDate <= :endDate " +

@@ -3,7 +3,6 @@ package ru.tveu.shiftcrm.api.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import ru.tveu.shiftcrm.core.entity.PaymentType;
 
 @Builder
 public record TransactionCreateRequest(
@@ -14,6 +13,6 @@ public record TransactionCreateRequest(
         double amount,
 
         @NotBlank
-        PaymentType paymentType
+        String paymentType
 ) {
 }

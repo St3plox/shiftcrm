@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import ru.tveu.shiftcrm.api.dto.TransactionCreateRequest;
 import ru.tveu.shiftcrm.api.dto.TransactionDTO;
+import ru.tveu.shiftcrm.core.entity.PaymentType;
 import ru.tveu.shiftcrm.core.entity.Seller;
 import ru.tveu.shiftcrm.core.entity.Transaction;
 import ru.tveu.shiftcrm.core.exception.ErrorCode;
@@ -27,7 +28,7 @@ public class TransactionMapper {
         return Transaction.builder()
                 .seller(seller)
                 .amount(createRequest.amount())
-                .paymentType(createRequest.paymentType())
+                .paymentType(PaymentType.valueOf(createRequest.paymentType()))
                 .build();
     }
 

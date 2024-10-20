@@ -1,5 +1,5 @@
 HELP.md
-secrets.env
+*.env
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar

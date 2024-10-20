@@ -1,5 +1,6 @@
 package ru.tveu.shiftcrm.api.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +33,7 @@ public class TransactionController {
 
     @PostMapping(Path.TRANSACTION_POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public TransactionDTO createTransaction(@RequestBody TransactionCreateRequest createRequest) {
+    public TransactionDTO createTransaction(@RequestBody @Valid TransactionCreateRequest createRequest) {
 
         return transactionService.create(createRequest);
     }
