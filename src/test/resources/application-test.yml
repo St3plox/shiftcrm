@@ -6,12 +6,10 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop  # Automatically create and drop the schema between tests
-    show-sql: false  # Generally, avoid noisy logs in tests
+      ddl-auto: create-drop
+    show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
-    enabled: true
-    locations:
-      - classpath:db/migration  # Enable Flyway migrations if needed
+    enabled: false
   cache:
-    type: none  # Disable caching for tests
+    type: none
